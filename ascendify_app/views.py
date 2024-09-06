@@ -4,4 +4,4 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("testing!!")
+    return render(request, 'ascendify_app/index.html')
