@@ -1,16 +1,72 @@
 {% load static tailwind_tags %}
-
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     {% tailwind_css %}
-    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climbing Community</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
-<body>
-    <div class="min-h-screen flex flex-col justify-center items-center">
-        <h1 class="text-4xl font-bold text-blue-600 mb-4">Welcome to Django with Tailwind CSS</h1>
-        <p class="text-lg text-gray-700">Your integration is working correctly!</p>
-        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Click Me</button>
+<body class="bg-gray-900 text-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-2xl font-bold text-white">
+                <a href="#" class="hover:text-gray-400">Ascendify</a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative w-full max-w-xs">
+                <input class="bg-gray-700 text-gray-300 w-full py-2 px-4 rounded-full focus:outline-none focus:bg-gray-600 focus:ring-2 focus:ring-blue-500" 
+                       type="text" 
+                       placeholder="Search routes, communities...">
+                <span class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16l-4-4m0 0l4-4m-4 4h12m4 4v2m0 4h-4v-6a2 2 0 012-2h2v2m-4 0v4"></path>
+                    </svg>
+                </span>
+            </div>
+
+            <!-- Links and Profile -->
+            <div class="flex items-center space-x-6">
+                <a href="#" class="text-gray-300 hover:text-gray-400">Home</a>
+                <a href="#" class="text-gray-300 hover:text-gray-400">Feed</a>
+                <a href="#" class="text-gray-300 hover:text-gray-400">Events</a>
+
+                <!-- Profile Dropdown -->
+                <div class="relative">
+                    <button class="flex items-center space-x-2 bg-gray-700 py-2 px-3 rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <img class="w-8 h-8 rounded-full" src="https://via.placeholder.com/40" alt="Profile">
+                        <span class="text-gray-300">John Doe</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg hidden">
+                        <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container mx-auto p-4">
+        <!-- Your page content goes here -->
     </div>
+
+    <script>
+        // Toggle Dropdown
+        document.querySelector('.relative button').addEventListener('click', function () {
+            this.nextElementSibling.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>
