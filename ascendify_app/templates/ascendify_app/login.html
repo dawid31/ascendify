@@ -26,7 +26,17 @@
                            type="text" 
                            name="username" 
                            placeholder="Enter your username" 
-                           required>
+                           required> 
+                        {% if messages %}
+                           <div class="mt-4">
+                               {% for message in messages %}
+                                   <div class="p-3 rounded text-sm {% if message.tags == 'error' %}bg-red-500 text-white{% elif message.tags == 'success' %}bg-green-500 text-white{% endif %}">
+                                       {{ message }}
+                                   </div>
+                               {% endfor %}
+                           </div>
+                       {% endif %}
+                
                 </div>
 
                 <div class="mb-6">
