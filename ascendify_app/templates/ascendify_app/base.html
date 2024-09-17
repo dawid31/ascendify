@@ -1,0 +1,22 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climbing Community</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100">
+     
+    {% include 'ascendify_app/navbar.html' %}
+
+    <script>
+        // Toggle Dropdown
+        document.querySelector('.relative button').addEventListener('click', function () {
+            this.nextElementSibling.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,6 @@
 {% load static tailwind_tags %}
+{% include 'ascendify_app/base.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,37 +11,7 @@
 </head>
 <body class="bg-gray-900 text-gray-100">
 
-    <!-- Navbar -->
-    <nav class="bg-gray-800 p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold text-white">
-                <a href="{% url 'index' %}" class="hover:text-gray-400">Ascendify</a>
-            </div>
-            <div class="relative w-full max-w-xs">
-                <input class="bg-gray-700 text-gray-300 w-full py-2 px-4 rounded-full focus:outline-none focus:bg-gray-600 focus:ring-2 focus:ring-blue-500" 
-                       type="text" 
-                       placeholder="Search routes, communities...">
-            </div>
-            <div class="flex items-center space-x-6">
-                <a href="{% url 'index' %}" class="text-gray-300 hover:text-gray-400">Home</a>
-                <a href="#" class="text-gray-300 hover:text-gray-400">Feed</a>
-                <a href="#" class="text-gray-300 hover:text-gray-400">Events</a>
-                <div class="relative">
-                    <button class="flex items-center space-x-2 bg-gray-700 py-2 px-3 rounded-full hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <img class="w-8 h-8 rounded-full" src="https://via.placeholder.com/40" alt="Profile">
-                        {{ request.user.get_username }}
-                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    <div class="absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg hidden">
-                        <a href="{% url 'profile' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Profile</a>
-                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    
 
     <!-- Profile Content -->
     <div class="container mx-auto p-6">
@@ -101,12 +73,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-        // Toggle Dropdown
-        document.querySelector('.relative button').addEventListener('click', function () {
-            this.nextElementSibling.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>
