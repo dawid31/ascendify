@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import Profile
 
 def index(request):
     return render(request, 'ascendify_app/index.html')
@@ -40,9 +41,19 @@ def logoutUser(request):
     logout(request)
     return redirect('index')
 
-
 @login_required
 def profile(request):
+    profile = get_object_or_404(Profile, user=request.user)
+    
+    context = {
+        'user': request.user,
+        'profile': profile,
+    }
+    return render(request, 'ascendify_app/profile.html', context)
+
+
+@login_required
+def edit_profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -62,4 +73,16 @@ def profile(request):
         'p_form': p_form
     }
 
-    return render(request, 'ascendify_app/profile.html', context)
+    return render(request, 'ascendify_app/edit_profile.html', context)
+
+
+def find_spots(request):
+    return render(request, 'ascendify_app/find_spots.html')
+
+
+def community(request):
+    return render(request, 'ascendify_app/community.html')
+
+
+def events(request):
+    return render(request, 'ascendify_app/events.html')

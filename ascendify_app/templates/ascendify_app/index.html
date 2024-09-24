@@ -27,7 +27,7 @@
             <div class="md:w-1/2 mb-6 md:mb-0">
                 <h2 class="text-2xl font-bold mb-3">For Climbers, By Climbers</h2>
                 <p class="text-md mb-3">Discover climbing spots, join a community of enthusiasts, and share your passion for the mountains. Whether you're a seasoned expert or just getting started, our platform is designed for you.</p>
-                <a href="#" class="bg-green-500 text-gray-100 py-2 px-4 rounded hover:bg-green-400">Join Now</a>
+                <a href="{% url 'register' %}" class="bg-green-500 text-gray-100 py-2 px-4 rounded hover:bg-green-400">Join Now</a>
             </div>
             
             <!-- Vector Image or SVG -->
@@ -42,19 +42,19 @@
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-10">What You Can Do</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gray-700 p-6 rounded-lg">
+                <div class="bg-gray-700 p-6 rounded-lg hover:bg-gray-600 transition duration-300">
                     <img src="{% static 'images/spot.png' %}" alt="Spot" class="mx-auto mb-4 h-20 w-20">
-                    <h3 class="text-2xl font-bold mb-2">Find Climbing Spots</h3>
+                    <a href="{% url 'find-spots' %}" class="inline-block bg-green-500 text-gray-100 font-bold py-2 px-4 rounded hover:bg-green-400 transition duration-300 mb-2 text-2xl">Find Climbing Spots</a>
                     <p>Discover the best places to climb, with recommendations from the community.</p>
                 </div>
-                <div class="bg-gray-700 p-6 rounded-lg">
+                <div class="bg-gray-700 p-6 rounded-lg hover:bg-gray-600 transition duration-300">
                     <img src="{% static 'images/community.png' %}" alt="Community" class="mx-auto mb-4 h-20 w-20">
-                    <h3 class="text-2xl font-bold mb-2">Join the Community</h3>
+                    <a href="{% url 'community' %}" class="inline-block bg-green-500 text-gray-100 font-bold py-2 px-4 rounded hover:bg-green-400 transition duration-300 mb-2 text-2xl">Join the Community</a>
                     <p>Connect with fellow climbers, share tips, and find partners for your next adventure.</p>
                 </div>
-                <div class="bg-gray-700 p-6 rounded-lg">
+                <div class="bg-gray-700 p-6 rounded-lg hover:bg-gray-600 transition duration-300">
                     <img src="{% static 'images/events.png' %}" alt="Events" class="mx-auto mb-4 h-20 w-20">
-                    <h3 class="text-2xl font-bold mb-2">Participate in Events</h3>
+                    <a href="{% url 'events' %}" class="inline-block bg-green-500 text-gray-100 font-bold py-2 px-4 rounded hover:bg-green-400 transition duration-300 mb-2 text-2xl">Participate in Events</a>
                     <p>Stay up to date on climbing competitions, workshops, and local meetups.</p>
                 </div>
             </div>
