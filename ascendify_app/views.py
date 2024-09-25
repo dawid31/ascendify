@@ -45,11 +45,21 @@ def logoutUser(request):
 def profile(request):
     profile = get_object_or_404(Profile, user=request.user)
     
+    # Extract data from climbing_stats (assuming keys like 'completed_routes' and 'highest_grade' exist)
+    climbing_stats = profile.climbing_stats if profile.climbing_stats else {}
+    completed_routes = climbing_stats.get('completed_routes', 'N/A')
+    highest_grade = climbing_stats.get('highest_grade', 'N/A')
+    experience_level = climbing_stats.get('experience_level', 'N/A')
+    
     context = {
         'user': request.user,
         'profile': profile,
+        'completed_routes': completed_routes,
+        'highest_grade': highest_grade,
+        'experience_level': experience_level,
     }
     return render(request, 'ascendify_app/profile.html', context)
+
 
 
 @login_required
@@ -74,6 +84,8 @@ def edit_profile(request):
     }
 
     return render(request, 'ascendify_app/edit_profile.html', context)
+
+
 
 
 def find_spots(request):

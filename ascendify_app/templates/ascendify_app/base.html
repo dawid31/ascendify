@@ -11,7 +11,20 @@
 <body class="bg-gray-900 text-gray-100">
      
     {% include 'ascendify_app/navbar.html' %}
-
+    
+    {% if messages %}
+    <div class="flex justify-center mt-4">
+        <div class="space-y-2">
+            {% for message in messages %}
+                <div class="inline-block p-3 rounded text-sm max-w-xs text-center mx-auto 
+                    {% if message.tags == 'error' %}bg-red-500 text-white{% elif message.tags == 'success' %}bg-green-500 text-white{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
     <script>
         // Toggle Dropdowns
         document.querySelectorAll('.dropdown-toggle').forEach(button => {

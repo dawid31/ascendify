@@ -1,3 +1,5 @@
 .env
 ascendify/__pycache__/
 ascendify_app/__pycache__/
+ascendify_app/migrations
+db.sqlite3
