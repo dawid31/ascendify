@@ -1,0 +1,81 @@
+{% load static tailwind_tags %}
+{% include 'ascendify_app/base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile</title>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <div class="container mx-auto p-8">
+        <div class="p-8 bg-gray-800 shadow-md rounded-lg mt-16">
+            <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="grid grid-cols-3 text-center order-last md:order-first mt-20 md:mt-0">
+                    <div>
+                        <p class="font-bold text-gray-100 text-xl">22</p>
+                        <p class="text-gray-400">Friends</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-100 text-xl">10</p>
+                        <p class="text-gray-400">Ascents</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-100 text-xl">89</p>
+                        <p class="text-gray-400">Highest Grade</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="w-48 h-48 bg-gray-600 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-gray-400">
+                        {% if profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-48 h-48 object-cover rounded-full">
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                        {% endif %}
+                    </div>
+                </div>
+                
+
+                <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
+                    <button
+                        class="text-white py-2 px-4  rounded bg-green-500 hover:bg-green-400 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
+                    >
+                        Connect
+
+                    </button>
+                    <a href="{% url 'edit-profile' %}">
+                        <button class="text-white py-2 px-4 rounded bg-gray-700 hover:bg-gray-600 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
+                            Edit profile
+                        </button>
+                    </a>
+                    
+                </div>
+            </div>
+
+            <div class="mt-20 text-center border-b border-gray-700 pb-12">
+                <h1 class="text-4xl font-medium text-gray-100">{{ user.username }}</h1>
+                <p class="font-light text-gray-400 mt-3">{{ profile.location }}</p>
+
+                <p class="mt-8 text-gray-500">{{ profile.bio }}</p>
+            </div>
+
+            <div class="mt-12 flex flex-col justify-center">
+                <p class="text-gray-400 text-center font-light lg:px-16">Recent activity np. 3 rzeczy</p>
+                {% for activity in user_activity %}
+                {{user.username}} contributed at: {{activity.content}}
+                {% endfor %}
+                <button class="text-green-500 py-2 px-4 font-medium mt-4">
+                    Show full activity
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

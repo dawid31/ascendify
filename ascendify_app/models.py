@@ -32,27 +32,26 @@ class Ascent(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ascended {self.route.name} on {self.date}"
-
-
-class Discussion(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-
-class Group(models.Model):
+    
+    
+class TextChannel(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
-    members = models.ManyToManyField(User, related_name='ascendify_groups')
+    description = models.TextField(blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+
+class Message(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    channel = models.ForeignKey(TextChannel, on_delete=models.CASCADE, related_name='messages')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message by {self.author} in {self.channel.name}"
 
 
 class Event(models.Model):

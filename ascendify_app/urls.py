@@ -11,5 +11,8 @@ urlpatterns = [
     path('find-spots', views.find_spots, name='find-spots'),
     path('community', views.community, name='community'),
     path('events', views.events, name='events'),
+    path('forum/', views.forum, name='forum'),
+    path('forum/channel/<int:channel_id>/', views.channel_discussion_view, name='channel_discussion'), 
+    path('forum/send_message/<int:channel_id>/', views.send_message, name='send_message'),
 
 ]

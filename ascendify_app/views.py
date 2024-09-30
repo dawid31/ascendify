@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
-from .models import Profile
+from .models import Profile, TextChannel, Message
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 def index(request):
     return render(request, 'ascendify_app/index.html')
@@ -58,7 +60,7 @@ def profile(request):
         'highest_grade': highest_grade,
         'experience_level': experience_level,
     }
-    return render(request, 'ascendify_app/profile.html', context)
+    return render(request, 'ascendify_app/new_profile.html', context)
 
 
 
@@ -86,7 +88,30 @@ def edit_profile(request):
     return render(request, 'ascendify_app/edit_profile.html', context)
 
 
+@login_required
+def forum(request):
+    """View to list all text channels."""
+    text_channels = TextChannel.objects.prefetch_related('messages').all()
+    return render(request, 'ascendify_app/forum.html', {'text_channels': text_channels})
 
+@login_required
+def channel_discussion_view(request, channel_id):
+    """View to display the full discussion for a specific text channel."""
+    channel = get_object_or_404(TextChannel, id=channel_id)
+    return render(request, 'ascendify_app/channel_discussion.html', {'channel': channel})
+
+@login_required
+def send_message(request, channel_id):
+    """View to handle sending a new message to a text channel."""
+    channel = get_object_or_404(TextChannel, id=channel_id)
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            Message.objects.create(author=request.user, channel=channel, content=content)
+            return HttpResponseRedirect(reverse('channel_discussion', args=[channel.id]))  # Redirect to the discussion view
+
+    return redirect('channel_discussion', channel_id=channel.id)  # Redirect back to the channel if not a POST request
 
 def find_spots(request):
     return render(request, 'ascendify_app/find_spots.html')
