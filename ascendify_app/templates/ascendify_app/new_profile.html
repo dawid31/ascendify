@@ -20,11 +20,11 @@
                         <p class="text-gray-400">Friends</p>
                     </div>
                     <div>
-                        <p class="font-bold text-gray-100 text-xl">10</p>
+                        <p class="font-bold text-gray-100 text-xl">{{ completed_routes}}</p>
                         <p class="text-gray-400">Ascents</p>
                     </div>
                     <div>
-                        <p class="font-bold text-gray-100 text-xl">89</p>
+                        <p class="font-bold text-gray-100 text-xl">{{ highest_grade }}</p>
                         <p class="text-gray-400">Highest Grade</p>
                     </div>
                 </div>
@@ -43,12 +43,10 @@
                 
 
                 <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
-                    <button
-                        class="text-white py-2 px-4  rounded bg-green-500 hover:bg-green-400 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
-                    >
+                    <button class="text-white py-2 px-4  rounded bg-green-500 hover:bg-green-400 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
                         Connect
-
                     </button>
+
                     <a href="{% url 'edit-profile' %}">
                         <button class="text-white py-2 px-4 rounded bg-gray-700 hover:bg-gray-600 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
                             Edit profile

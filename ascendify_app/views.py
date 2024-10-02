@@ -4,9 +4,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UserUpdateForm, ProfileUpdateForm
-from .models import Profile, TextChannel, Message
+from .models import Profile, TextChannel, Message, Route, Event
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 def index(request):
     return render(request, 'ascendify_app/index.html')
@@ -112,6 +113,30 @@ def send_message(request, channel_id):
             return HttpResponseRedirect(reverse('channel_discussion', args=[channel.id]))  # Redirect to the discussion view
 
     return redirect('channel_discussion', channel_id=channel.id)  # Redirect back to the channel if not a POST request
+
+def search(request):
+    query = request.GET.get('q')
+    if query:
+        # Search across Route, TextChannel, and Event models
+        routes = Route.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query)
+        )
+        communities = TextChannel.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        events = Event.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query)
+        )
+    else:
+        routes = communities = events = []
+
+    context = {
+        'routes': routes,
+        'communities': communities,
+        'events': events,
+        'query': query
+    }
+    return render(request, 'ascendify_app/search_results.html', context)
 
 def find_spots(request):
     return render(request, 'ascendify_app/find_spots.html')

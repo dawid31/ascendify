@@ -1,0 +1,72 @@
+{% load static tailwind_tags %}
+{% include 'ascendify_app/base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %} 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto py-8">
+        <h2 class="text-4xl font-bold mb-6 text-center">Search Results for "{{ query }}"</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Routes Section -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold mb-4">Routes</h3>
+                <ul class="space-y-2">
+                    {% for route in routes %}
+                        <li class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition">
+                            <h4 class="text-lg font-medium">{{ route.name }}</h4>
+                            <p class="text-sm text-gray-400">{{ route.location }}</p>
+                            <p class="text-sm text-gray-400">{{ route.difficulty }}</p>
+                        </li>
+                    {% empty %}
+                        <li class="text-gray-400">No routes found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Communities Section -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold mb-4">Communities</h3>
+                <ul class="space-y-2">
+                    {% for community in communities %}
+                        <li class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition">
+                            <h4 class="text-lg font-medium">{{ community.name }}</h4>
+                            <p class="text-sm text-gray-400">{{ community.description }}</p>
+                        </li>
+                    {% empty %}
+                        <li class="text-gray-400">No communities found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Events Section -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold mb-4">Events</h3>
+                <ul class="space-y-2">
+                    {% for event in events %}
+                        <li class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition">
+                            <h4 class="text-lg font-medium">{{ event.name }}</h4>
+                            <p class="text-sm text-gray-400">{{ event.location }}</p>
+                            <p class="text-sm text-gray-400">{{ event.date|date:"F j, Y, g:i a" }}</p>
+                        </li>
+                    {% empty %}
+                        <li class="text-gray-400">No events found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- No Results Section -->
+        {% if not routes and not communities and not events %}
+            <p class="mt-6 text-center text-gray-400">No results found for your search.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
