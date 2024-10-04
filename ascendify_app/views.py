@@ -8,6 +8,7 @@ from .models import Profile, TextChannel, Message, Route, Event
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 def index(request):
     return render(request, 'ascendify_app/index.html')
@@ -45,23 +46,29 @@ def logoutUser(request):
     return redirect('index')
 
 @login_required
-def profile(request):
-    profile = get_object_or_404(Profile, user=request.user)
+def profile(request, user_id=None):
+    if user_id:
+        profile_user = get_object_or_404(User, id=user_id)
+    else:
+        profile_user = request.user
+
+    profile = get_object_or_404(Profile, user=profile_user)
     
-    # Extract data from climbing_stats (assuming keys like 'completed_routes' and 'highest_grade' exist)
+    # Extract data from climbing_stats
     climbing_stats = profile.climbing_stats if profile.climbing_stats else {}
     completed_routes = climbing_stats.get('completed_routes', 'N/A')
     highest_grade = climbing_stats.get('highest_grade', 'N/A')
     experience_level = climbing_stats.get('experience_level', 'N/A')
-    
+
     context = {
-        'user': request.user,
+        'user': profile_user,
         'profile': profile,
         'completed_routes': completed_routes,
         'highest_grade': highest_grade,
         'experience_level': experience_level,
     }
     return render(request, 'ascendify_app/new_profile.html', context)
+
 
 
 
@@ -127,14 +134,17 @@ def search(request):
         events = Event.objects.filter(
             Q(name__icontains=query) | Q(description__icontains=query) | Q(location__icontains=query)
         )
+        messages = Message.objects.filter(
+            Q(content__icontains=query) | Q(author__username__icontains=query) | Q(channel__name__icontains=query))
     else:
-        routes = communities = events = []
+        routes = communities = events = messages = []
 
     context = {
         'routes': routes,
         'communities': communities,
         'events': events,
-        'query': query
+        'query': query,
+        'messages': messages
     }
     return render(request, 'ascendify_app/search_results.html', context)
 

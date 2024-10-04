@@ -11,35 +11,53 @@
 </head>
 <body class="bg-gray-900 text-gray-100">
 
-    <div class="container mx-auto p-8">
-        <h1 class="text-4xl font-bold text-gray-100 text-center">{{ channel.name }}</h1>
-        <p class="text-gray-400 text-center">{{ channel.description }}</p>
+    <div class="container mx-auto px-4 py-8">
+        
+        <!-- Channel Info -->
+        <div class="sticky top-0 bg-gray-800 py-6 rounded mb-6 shadow-lg">
+            <h1 class="text-4xl font-bold text-center">{{ channel.name }}</h1>
+            <p class="text-gray-400 text-center">{{ channel.description }}</p>
+        </div>
 
-        <div class="mt-6">
-            <h2 class="text-2xl font-medium text-gray-200">Messages</h2>
-            <div class="mt-4 space-y-4">
+        <!-- Messages Section -->
+        <div class="space-y-6">
+            <h2 class="text-2xl font-medium text-gray-200 mb-4">Messages</h2>
+
+            <div class="space-y-6">
                 {% if channel.messages.all %}
                     {% for message in channel.messages.all %}
-                        <div class="bg-gray-700 p-4 rounded">
-                            <p class="text-gray-200"><strong>{{ message.author.username }}:</strong> {{ message.content }}</p>
-                            <p class="text-gray-500 text-sm">{{ message.created_at|date:"F j, Y, g:i a" }}</p>
+                        <div class="bg-gray-800 p-4 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out">
+                            <div class="flex items-start">
+                                <!-- User Avatar -->
+                                <img src="{{ message.author.profile.profile_picture.url }}" alt="{{ message.author.username }}" class="w-20 h-20 rounded-full object-cover mr-4 shadow">
+                                
+                                <!-- Message Content -->
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-200">
+                                        {{ message.author.username }}
+                                    </p>
+                                    <p class="text-gray-400">{{ message.content }}</p>
+                                    <p class="text-gray-500 text-sm mt-2">{{ message.created_at|timesince }} ago</p></div>
+                            </div>
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p class="text-gray-500">No messages in this channel yet.</p>
+                    <p class="text-gray-500">No messages in this channel yet. Be the first to send a message!</p>
                 {% endif %}
             </div>
+        </div>
 
-            <!-- Input for new message -->
-            <div class="mt-4">
-                <form method="POST" action="{% url 'send_message' channel.id %}">
-                    {% csrf_token %}
-                    <textarea name="content" rows="2" class="w-full p-2 rounded bg-gray-700 text-gray-200" placeholder="Type your message..."></textarea>
-                    <button type="submit" class="mt-2 text-white py-2 px-4 rounded bg-green-500 hover:bg-green-400 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5">
-                        Send Message
-                    </button>
-                </form>
-            </div>
+        <!-- Input for New Message -->
+        <div class="mt-8">
+            <form method="POST" action="{% url 'send_message' channel.id %}">
+                {% csrf_token %}
+                <div class="flex items-center">
+                    <textarea name="content" rows="3" class="w-full p-4 rounded-lg bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-200 ease-in-out" placeholder="Type your message..."></textarea>
+                </div>
+                <button type="submit" class="mt-3 w-full py-3 px-6 rounded-lg bg-green-600 hover:bg-green-500 shadow-lg text-white font-semibold tracking-wide transition duration-300 transform hover:translate-y-1 hover:shadow-xl">
+                    Send Message
+                </button>
+            </form>
         </div>
     </div>
 
