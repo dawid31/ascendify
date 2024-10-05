@@ -36,3 +36,7 @@ class ProfileUpdateForm(forms.ModelForm):
         if commit:
             profile.save()
         return profile
+    
+class LocationForm(forms.Form):
+    latitude = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-input', 'placeholder': 'Latitude'}))
+    longitude = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-input', 'placeholder': 'Longitude'}))

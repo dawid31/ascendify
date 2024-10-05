@@ -9,6 +9,10 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib.auth.models import User
+import requests
+from .forms import LocationForm
+from dotenv import load_dotenv
+import os
 
 def index(request):
     return render(request, 'ascendify_app/index.html')
@@ -158,3 +162,31 @@ def community(request):
 
 def events(request):
     return render(request, 'ascendify_app/events.html')
+
+
+
+def find_spots(request):
+    spots = []
+    load_dotenv()
+    api_key = os.getenv('GOOGLE_API_KEY')
+    if request.method == 'POST':
+        form = LocationForm(request.POST)
+        if form.is_valid():
+            latitude = form.cleaned_data.get('latitude')
+            longitude = form.cleaned_data.get('longitude')
+
+            # Google Places API call
+            radius = 5000  # 5km radius
+            url = (
+                f'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+                f'?location={latitude},{longitude}'
+                f'&keyword=bouldering'
+                f'&key={api_key}'
+            )
+
+            response = requests.get(url)
+            spots = response.json().get('results', [])
+    else:
+        form = LocationForm()
+
+    return render(request, 'ascendify_app/find_spots.html', {'form': form, 'spots': spots, 'api_key': api_key})

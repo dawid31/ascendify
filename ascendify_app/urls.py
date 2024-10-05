@@ -15,4 +15,5 @@ urlpatterns = [
     path('forum/channel/<int:channel_id>/', views.channel_discussion_view, name='channel_discussion'), 
     path('forum/send_message/<int:channel_id>/', views.send_message, name='send_message'),
     path('search/', views.search, name='search'),
+    path('find-spots/', views.find_spots, name='find_spots'),
 ]
