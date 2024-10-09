@@ -6,8 +6,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=100, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, default='profile_pics/climber.png')
-    climbing_stats = models.JSONField(default=dict)  # Store stats like climbs completed, total ascents, etc.
-
+    climbing_stats = models.JSONField(default=dict)
     def __str__(self):
         return self.user.username
 
@@ -15,7 +14,7 @@ class Profile(models.Model):
 class Route(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=200)
-    difficulty = models.CharField(max_length=50)  #e.g., V2, 5.10, etc.
+    difficulty = models.CharField(max_length=50) 
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='routes/', blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)

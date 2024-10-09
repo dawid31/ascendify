@@ -17,20 +17,15 @@
             <!-- Location Form -->
             <form method="POST" class="mb-6">
                 {% csrf_token %}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        {{ form.latitude.label_tag }}
-                        {{ form.latitude }}
-                    </div>
-                    <div>
-                        {{ form.longitude.label_tag }}
-                        {{ form.longitude }}
-                    </div>
+                <div>
+                    {{ form.city.label_tag }}
+                    {{ form.city }}
                 </div>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mt-4">
                     Find Spots
                 </button>
             </form>
+            
 
             <!-- Display Bouldering Spots -->
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">

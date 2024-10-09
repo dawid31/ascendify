@@ -31,7 +31,11 @@
                 </svg>
             </button>
             <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg hidden">
+                {% if request.user.is_authenticated %}
                 <a href="{% url 'forum' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Text Channels</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Text Channels</a>
+                {% endif %}
                 <a href="{% url 'index' %}" class="block px-4 py-2 text-gray-300 hover:bg-gray-600">Events</a>
             </div>
         </div>

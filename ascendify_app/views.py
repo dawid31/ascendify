@@ -172,20 +172,34 @@ def find_spots(request):
     if request.method == 'POST':
         form = LocationForm(request.POST)
         if form.is_valid():
-            latitude = form.cleaned_data.get('latitude')
-            longitude = form.cleaned_data.get('longitude')
+            city = form.cleaned_data.get('city')
 
-            # Google Places API call
-            radius = 5000  # 5km radius
-            url = (
-                f'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
-                f'?location={latitude},{longitude}'
-                f'&keyword=bouldering'
+            # Google Geocoding API call to get latitude and longitude
+            geocode_url = (
+                f'https://maps.googleapis.com/maps/api/geocode/json'
+                f'?address={city}'
                 f'&key={api_key}'
             )
+            geocode_response = requests.get(geocode_url).json()
 
-            response = requests.get(url)
-            spots = response.json().get('results', [])
+            if geocode_response.get('results'):
+                location = geocode_response['results'][0]['geometry']['location']
+                latitude = location['lat']
+                longitude = location['lng']
+
+                # Google Places API call to find bouldering spots
+                radius = 5000  # 5km radius
+                places_url = (
+                    f'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
+                    f'?location={latitude},{longitude}'
+                    f'&keyword=bouldering'
+                    f'&rankby=distance'
+                    f'&key={api_key}'
+                )
+
+                places_response = requests.get(places_url).json()
+                spots = places_response.get('results', [])
+
     else:
         form = LocationForm()
 

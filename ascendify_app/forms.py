@@ -38,5 +38,4 @@ class ProfileUpdateForm(forms.ModelForm):
         return profile
     
 class LocationForm(forms.Form):
-    latitude = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-input', 'placeholder': 'Latitude'}))
-    longitude = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'form-input', 'placeholder': 'Longitude'}))
+    city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-input text-black', 'placeholder': 'Enter city name'}))
