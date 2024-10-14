@@ -86,7 +86,7 @@ def edit_profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')
+            return redirect('index')
 
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -152,8 +152,7 @@ def search(request):
     }
     return render(request, 'ascendify_app/search_results.html', context)
 
-def find_spots(request):
-    return render(request, 'ascendify_app/find_spots.html')
+
 
 
 def community(request):
@@ -165,21 +164,18 @@ def events(request):
 
 
 
-def find_spots(request):
+def find_indoor_spots(request):
     spots = []
     load_dotenv()
     api_key = os.getenv('GOOGLE_API_KEY')
+    
     if request.method == 'POST':
         form = LocationForm(request.POST)
         if form.is_valid():
             city = form.cleaned_data.get('city')
-
-            # Google Geocoding API call to get latitude and longitude
-            geocode_url = (
-                f'https://maps.googleapis.com/maps/api/geocode/json'
-                f'?address={city}'
-                f'&key={api_key}'
-            )
+            
+            # Google Geocoding API call
+            geocode_url = f'https://maps.googleapis.com/maps/api/geocode/json?address={city}&key={api_key}'
             geocode_response = requests.get(geocode_url).json()
 
             if geocode_response.get('results'):
@@ -188,7 +184,6 @@ def find_spots(request):
                 longitude = location['lng']
 
                 # Google Places API call to find bouldering spots
-                radius = 5000  # 5km radius
                 places_url = (
                     f'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
                     f'?location={latitude},{longitude}'
@@ -196,11 +191,61 @@ def find_spots(request):
                     f'&rankby=distance'
                     f'&key={api_key}'
                 )
-
                 places_response = requests.get(places_url).json()
                 spots = places_response.get('results', [])
 
     else:
         form = LocationForm()
 
-    return render(request, 'ascendify_app/find_spots.html', {'form': form, 'spots': spots, 'api_key': api_key})
+    return render(request, 'ascendify_app/find_indoor_spots.html', {'form': form, 'spots': spots, 'api_key': api_key})
+
+
+def find_outdoor_spots(request):
+    spots = []
+    load_dotenv()
+    form = LocationForm(request.POST or None)
+    
+    if request.method == 'POST' and form.is_valid():
+        region = form.cleaned_data.get('city')  # Assume 'city' field is used for region search
+        
+        query = {
+            'query': f"""
+            query {{
+              areas(filter: {{area_name: {{match: "{region}"}}}}) {{
+                area_name
+                children {{
+                  area_name
+                  metadata {{
+                    lat
+                    lng
+                  }}
+                  media {{
+                    mediaUrl
+                  }}
+                }}
+              }}
+            }}
+            """
+        }
+
+        openbeta_api_url = "https://api.openbeta.io/graphql"
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(openbeta_api_url, json=query, headers=headers).json()
+        
+        areas = response['data']['areas'] if response.get('data') else []
+        for area in areas:
+            for child in area.get('children', []):
+                # Only add spots that have media
+                if child.get('media'):
+                    media_url = f"https://media.openbeta.io{child['media'][0]['mediaUrl']}"
+                    spots.append({
+                        'name': child['area_name'],
+                        'lat': child['metadata']['lat'],
+                        'lng': child['metadata']['lng'],
+                        'image': media_url
+                    })
+
+    return render(request, 'ascendify_app/find_outdoor_spots.html', {'form': form, 'spots': spots})
+
+pattern = 'https://media.openbeta.io' + 'mediaUrl'
+'''np. https://media.openbeta.io /u/6fd95718-8fe1-4adb-a140-3e5565f8a7b4/QGHfwkzgWn.jpg'''
