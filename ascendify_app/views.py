@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from django.contrib.auth.models import User
 import requests
-from .forms import LocationForm
+from .forms import LocationForm, EventForm
 from dotenv import load_dotenv
 import os
 
@@ -159,9 +159,38 @@ def community(request):
     return render(request, 'ascendify_app/community.html')
 
 
-def events(request):
-    return render(request, 'ascendify_app/events.html')
+def event_list(request):
+    events = Event.objects.all()
+    return render(request, 'ascendify_app/events_list.html', {'events': events})
 
+@login_required
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+            event.save()
+            return redirect('events')
+    else:
+        form = EventForm()
+    
+    return render(request, 'ascendify_app/create_event.html', {'form': form})
+
+@login_required
+def join_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.user not in event.attendees.all():
+        event.attendees.add(request.user)
+    return redirect('events')
+
+
+@login_required
+def leave_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.user in event.attendees.all():
+        event.attendees.remove(request.user)
+    return redirect('events')
 
 
 def find_indoor_spots(request):

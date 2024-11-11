@@ -1,0 +1,54 @@
+{% load static tailwind_tags %}
+{% include 'ascendify_app/base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% tailwind_css %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <div class="container mx-auto px-4 py-8">
+
+        <div class="flex items-center justify-between mb-6">
+            <h1 class="text-4xl font-bold">Events</h1>
+            <a href="{% url 'create_event' %}" class="bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:translate-y-1">
+                Create Event
+            </a>
+        </div>
+
+        <div class="space-y-6">
+            {% if events %}
+                {% for event in events %}
+                    <div class="bg-gray-800 p-4 rounded-lg shadow-lg hover:bg-gray-700 transition duration-300 ease-in-out">
+                        <h2 class="text-2xl font-semibold text-gray-200">{{ event.name }}</h2>
+                        <p class="text-gray-400">{{ event.description }}</p>
+                        <p class="text-gray-500 mt-2">Location: {{ event.location }}</p>
+                        <p class="text-gray-500">Date: {{ event.date }}</p>
+                        <p class="text-gray-500 mt-2">Attendees: {{ event.attendees.count }}</p>
+                        <p class="text-sm text-gray-500">Created by: {{ event.created_by.username }}</p>
+
+                        <!-- Check if user is attending or not -->
+                        {% if request.user in event.attendees.all %}
+                            <p class="text-green-500 mt-2">You are attending this event</p>
+                            <a href="{% url 'leave_event' event.id %}" class="mt-2 inline-block bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:translate-y-1">
+                                Leave Event
+                            </a>
+                        {% else %}
+                            <a href="{% url 'join_event' event.id %}" class="mt-2 inline-block bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:translate-y-1">
+                                Join Event
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-500">No events created yet. Be the first to create one!</p>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+</html>

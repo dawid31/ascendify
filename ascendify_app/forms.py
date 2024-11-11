@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile
+from .models import Profile, Event
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 
@@ -39,3 +39,9 @@ class ProfileUpdateForm(forms.ModelForm):
     
 class LocationForm(forms.Form):
     city = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-input text-black', 'placeholder': 'Enter city name'}))
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['name', 'description', 'location', 'date']
